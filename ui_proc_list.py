@@ -19,7 +19,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 
-from gi.repository import Gdk, Gtk
+from gi.repository import Gdk
+from gi.repository import Gtk
 
 from ui_maps_list import MemViewUIMapsList
 
@@ -49,26 +50,37 @@ class MemViewUIProcListWindow(Gtk.Window):
     def create_process_list(self):
         self.process_liststore = Gtk.ListStore(int, str, str, int, int, int)
 
-        renderer_text = Gtk.CellRendererText()
+        text_left_aligned = Gtk.CellRendererText(xalign=0)
+        text_right_aligned = Gtk.CellRendererText(xalign=1)
 
-        process_treeview_scroller = Gtk.ScrolledWindow()
-        process_treeview_scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         process_treeview = Gtk.TreeView(model=self.process_liststore)
 
-        column_pid_text = Gtk.TreeViewColumn('PID', renderer_text, text=0)
-        column_filename_text = Gtk.TreeViewColumn('Filename', renderer_text, text=1)
-        column_state_text = Gtk.TreeViewColumn('State', renderer_text, text=2)
-        column_ppid_text = Gtk.TreeViewColumn('Parent PID', renderer_text, text=3)
-        column_pgrp_text = Gtk.TreeViewColumn('Process GID', renderer_text, text=4)
-        column_session_text = Gtk.TreeViewColumn('Session ID', renderer_text, text=5)
+        column_pid = Gtk.TreeViewColumn('PID', text_right_aligned, text=0)
+        column_pid.set_sort_column_id(0)
+        process_treeview.append_column(column_pid)
 
-        process_treeview.append_column(column_pid_text)
-        process_treeview.append_column(column_filename_text)
-        process_treeview.append_column(column_state_text)
-        process_treeview.append_column(column_ppid_text)
-        process_treeview.append_column(column_pgrp_text)
-        process_treeview.append_column(column_session_text)
+        column_filename = Gtk.TreeViewColumn('Filename', text_left_aligned, text=1)
+        column_filename.set_sort_column_id(1)
+        process_treeview.append_column(column_filename)
 
+        column_state = Gtk.TreeViewColumn('State', text_left_aligned, text=2)
+        column_state.set_sort_column_id(2)
+        process_treeview.append_column(column_state)
+
+        column_ppid = Gtk.TreeViewColumn('Parent PID', text_right_aligned, text=3)
+        column_ppid.set_sort_column_id(3)
+        process_treeview.append_column(column_ppid)
+
+        column_pgrp = Gtk.TreeViewColumn('Process GID', text_right_aligned, text=4)
+        column_pgrp.set_sort_column_id(4)
+        process_treeview.append_column(column_pgrp)
+
+        column_session = Gtk.TreeViewColumn('Session ID', text_right_aligned, text=5)
+        column_session.set_sort_column_id(5)
+        process_treeview.append_column(column_session)
+
+        process_treeview_scroller = Gtk.ScrolledWindow()
+        process_treeview_scroller.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         process_treeview_scroller.add(process_treeview)
 
         return process_treeview_scroller
