@@ -34,7 +34,7 @@ if __name__ == '__main__':
         window = MemViewUIProcListWindow()
         reader = MemViewReader()
 
-        window.update_process_liststore(reader.read_proc_stat_all())
+        window.update_process_list(reader.read_proc_stat_all())
 
         _, msg = reader.ptrace_scope_status()
         window.update_ptrace_label(msg)
