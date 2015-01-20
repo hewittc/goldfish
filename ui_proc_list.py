@@ -35,8 +35,8 @@ class MemViewUIProcListWindow(Gtk.Window):
         self.ptrace_status_label = Gtk.Label('', xalign=1)
 
         vbox = Gtk.VBox()
-        vbox.pack_start(self.process_treeview_scroller, True, True, 0)
-        vbox.pack_start(self.ptrace_status_label, False, True, 0)
+        vbox.pack_start(self.process_treeview_scroller, expand=True, fill=True, padding=0)
+        vbox.pack_start(self.ptrace_status_label, expand=False, fill=True, padding=0)
         self.add(vbox)
 
         self.show_all()
@@ -61,6 +61,8 @@ class MemViewUIProcListWindow(Gtk.Window):
 
         column_filename = Gtk.TreeViewColumn('Filename', text_left_aligned, text=1)
         column_filename.set_sort_column_id(1)
+        #column_filename.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
+        column_filename.set_expand(True)
         process_treeview.append_column(column_filename)
 
         column_state = Gtk.TreeViewColumn('State', text_left_aligned, text=2)
