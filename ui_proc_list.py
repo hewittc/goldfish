@@ -50,10 +50,13 @@ class MemViewUIProcListWindow(Gtk.Window):
     def create_process_list(self):
         self.process_liststore = Gtk.ListStore(int, str, str, int, int, int)
 
+        process_liststore_sorted = Gtk.TreeModelSort(model=self.process_liststore)
+        process_liststore_sorted.set_sort_column_id(0, Gtk.SortType.DESCENDING)
+
+        process_treeview = Gtk.TreeView(model=process_liststore_sorted)
+
         text_left_aligned = Gtk.CellRendererText(xalign=0)
         text_right_aligned = Gtk.CellRendererText(xalign=1)
-
-        process_treeview = Gtk.TreeView(model=self.process_liststore)
 
         column_pid = Gtk.TreeViewColumn('PID', text_right_aligned, text=0)
         column_pid.set_sort_column_id(0)
@@ -61,7 +64,6 @@ class MemViewUIProcListWindow(Gtk.Window):
 
         column_filename = Gtk.TreeViewColumn('Filename', text_left_aligned, text=1)
         column_filename.set_sort_column_id(1)
-        #column_filename.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
         column_filename.set_expand(True)
         process_treeview.append_column(column_filename)
 
