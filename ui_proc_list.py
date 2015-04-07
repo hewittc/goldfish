@@ -100,7 +100,4 @@ class MemViewUIProcListWindow(Gtk.Window):
     def run(self):
         Gtk.main()
 
-if __name__ == '__main__':
-    MemViewUIWindow()
-
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=python

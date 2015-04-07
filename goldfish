@@ -25,8 +25,8 @@ import signal
 import sys
 
 from ui_proc_list import MemViewUIProcListWindow
-from reader import MemViewReader
-from reader import MemViewError
+from proc_reader import MemViewReader
+from proc_reader import MemViewError
 
 if __name__ == '__main__':
     if platform.system() != 'Linux':
