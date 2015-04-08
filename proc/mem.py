@@ -76,16 +76,8 @@ class ProcMemReader(object):
         if os.path.isfile(ptrace_scope) and os.access(ptrace_scope, os.R_OK):
             with open(ptrace_scope) as ptrace_scope:
                 perm = int(ptrace_scope.readline())
-                if perm is 0:
-                    msg = 'classic ptrace permissions'
-                elif perm is 1:
-                    msg = 'restricted ptrace'
-                elif perm is 2:
-                    msg = 'admin-only attach'
-                elif perm is 3:
-                    msg = 'no attach'
 
-        return (perm, msg)
+        return perm
 
     def _extract_maps(self, line):
         maps = re.match(r'([0-9A-Fa-f]+)-([0-9A-Fa-f]+)\s+([-r][-w][-x][sp])\s+([0-9A-Fa-f]+)\s+([:0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+(.*)$', line)

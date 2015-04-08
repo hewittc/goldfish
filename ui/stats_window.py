@@ -94,7 +94,16 @@ class UIStatsWindow(Gtk.Window):
         for process in processes:
             self.process_liststore.append([process.pid, process.comm, process.state, process.ppid, process.pgrp, process.session])
 
-    def update_ptrace_label(self, msg):
+    def update_ptrace_label(self, perm):
+        if perm is 0:
+            msg = 'classic ptrace permissions'
+        elif perm is 1:
+            msg = 'restricted ptrace'
+        elif perm is 2:
+            msg = 'admin-only attach'
+        elif perm is 3:
+            msg = 'no attach'
+
         self.ptrace_status_label.set_text('process trace restrictions: {msg}'.format(msg=msg))
 
     def run(self):

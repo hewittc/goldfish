@@ -58,8 +58,8 @@ class Goldfish(threading.Thread):
         self.stats_window = UIStatsWindow()
         self.stats_window.update_process_list(processes)
 
-        _, msg = mem.ptrace_scope_status()
-        self.stats_window.update_ptrace_label(msg)
+        perm = mem.ptrace_scope_status()
+        self.stats_window.update_ptrace_label(perm)
 
         self.stats_window.run()
 
