@@ -43,7 +43,7 @@ class ProcStat(object):
             elif self.state is 'W':
                 result = 'Paging'
 
-        return state
+        return result
 
 
 class ProcStatReader(object):
@@ -56,26 +56,28 @@ class ProcStatReader(object):
 
     def decode_proc_stat(self, line):
         stat = re.match(r'(\d+)\s\((.+)\)\s([RSDZTW])\s(\d+)\s(\d+)\s(\d+)', line)
-        pid = int(stat.group(1))
-        comm = stat.group(2)
-        state = stat.group(3)
-        ppid = int(stat.group(4))
-        pgrp = int(stat.group(5))
-        session = int(stat.group(6))
+        result = dict()
 
-        return { 'pid': pid, 'comm': comm, 'state': state, 'ppid': ppid, 'pgrp': pgrp, 'session': session }
+        result['pid'] = int(stat.group(1))
+        result['comm'] = stat.group(2)
+        result['state'] = stat.group(3)
+        result['ppid'] = int(stat.group(4))
+        result['pgrp'] = int(stat.group(5))
+        result['session'] = int(stat.group(6))
+
+        return result
 
     def read_proc_stat(self, pid):
-        proc_stat_path = '/proc/{pid}/stat'.format(pid=pid)
-        proc_stat = ProcStat(pid)
+        proc_stat = '/proc/{pid}/stat'.format(pid=pid)
+        result = ProcStat(pid)
 
-        if os.path.isfile(proc_stat_path) and os.access(proc_stat_path, os.R_OK):
-            with open(proc_stat_path, 'r') as fd:
+        if os.path.isfile(proc_stat) and os.access(proc_stat, os.R_OK):
+            with open(proc_stat, 'r') as fd:
                 line = fd.readlines()[0]
                 decoded = self.decode_proc_stat(line)
                 for key in decoded:
-                    setattr(proc_stat, key, decoded[key])
+                    setattr(result, key, decoded[key])
 
-        return proc_stat
+        return result
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=python
