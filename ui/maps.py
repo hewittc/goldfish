@@ -21,7 +21,7 @@
 
 from gi.repository import Gtk
 
-class UIMapsWindow(Gtk.Window):
+class GUIMapsWindow(Gtk.Window):
 
     def __init__(self, *args, **kwargs):
         super().__init__(title='Memory Maps')

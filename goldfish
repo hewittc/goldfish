@@ -26,7 +26,7 @@ import signal
 import sys
 import os
 
-from ui.stats_window import UIStatsWindow
+from ui.stats import GUIStatsWindow
 from proc.stat import ProcStatReader
 from proc.maps import ProcMapsReader
 from proc.mem import ProcMemReader
@@ -55,7 +55,7 @@ class Goldfish(threading.Thread):
         pids = stat.get_pids()
         processes = [ stat.read_proc_stat(pid) for pid in pids ]
 
-        self.stats_window = UIStatsWindow()
+        self.stats_window = GUIStatsWindow()
         self.stats_window.update_process_list(processes)
 
         perm = mem.ptrace_scope_status()
