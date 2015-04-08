@@ -53,7 +53,7 @@ class GUIStatsWindow(Gtk.Window):
         process_liststore_sorted.set_sort_column_id(0, Gtk.SortType.DESCENDING)
 
         process_treeview = Gtk.TreeView(model=process_liststore_sorted)
-        process_treeview.connect('row-activated', GUIMapsWindow, 'hiiiiii')
+        #process_treeview.connect('row-activated', GUIMapsWindow, 'hiiiiii')
 
         text_left_aligned = Gtk.CellRendererText(xalign=0)
         text_right_aligned = Gtk.CellRendererText(xalign=1)
@@ -62,20 +62,20 @@ class GUIStatsWindow(Gtk.Window):
         column_pid.set_sort_column_id(0)
         process_treeview.append_column(column_pid)
 
-        column_filename = Gtk.TreeViewColumn('Filename', text_left_aligned, text=1)
-        column_filename.set_sort_column_id(1)
-        column_filename.set_expand(True)
-        process_treeview.append_column(column_filename)
+        column_comm = Gtk.TreeViewColumn('Filename', text_left_aligned, text=1)
+        column_comm.set_sort_column_id(1)
+        column_comm.set_expand(True)
+        process_treeview.append_column(column_comm)
 
-        column_ppid = Gtk.TreeViewColumn('Parent PID', text_right_aligned, text=3)
+        column_ppid = Gtk.TreeViewColumn('Parent PID', text_right_aligned, text=2)
         column_ppid.set_sort_column_id(2)
         process_treeview.append_column(column_ppid)
 
-        column_pgrp = Gtk.TreeViewColumn('Process GID', text_right_aligned, text=4)
+        column_pgrp = Gtk.TreeViewColumn('Process GID', text_right_aligned, text=3)
         column_pgrp.set_sort_column_id(3)
         process_treeview.append_column(column_pgrp)
 
-        column_session = Gtk.TreeViewColumn('Session ID', text_right_aligned, text=5)
+        column_session = Gtk.TreeViewColumn('Session ID', text_right_aligned, text=4)
         column_session.set_sort_column_id(4)
         process_treeview.append_column(column_session)
 
