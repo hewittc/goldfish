@@ -28,6 +28,17 @@ import os
 
 from ui.stats_window import UIStatsWindow
 from proc.stat import ProcStatReader
+#from proc.maps import ProcMapsReader
+from proc.mem import ProcMemReader
+
+class GoldfishError(Exception):
+
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return self.message
+
 
 class Goldfish(threading.Thread):
 
@@ -37,30 +48,28 @@ class Goldfish(threading.Thread):
 
         signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-        psr = ProcStatReader()
-        pids = psr.get_pids()
-        processes = [ psr.read_proc_stat(pid) for pid in pids ]
+        stat = ProcStatReader()
+        #maps = ProcMapsReader()
+        mem = ProcMemReader()
+
+        pids = stat.get_pids()
+        processes = [ stat.read_proc_stat(pid) for pid in pids ]
 
         self.stats_window = UIStatsWindow()
         self.stats_window.update_process_list(processes)
+
+        _, msg = mem.ptrace_scope_status()
+        self.stats_window.update_ptrace_label(msg)
+
         self.stats_window.run()
 
 if __name__ == '__main__':
     try:
         Goldfish()
+    except GoldfishError as err:
+        print('error: {msg}'.format(msg=err))
+        sys.exit(-1)
     except KeyboardInterrupt:
         pass
-
-        #window.update_process_list(reader.read_proc_stat_all())
-
-        #_, msg = reader.ptrace_scope_status()
-        #window.update_ptrace_label(msg)
-
-        #window.run()
-    #except MemViewError as err:
-    #    print('error: {msg}'.format(msg=err))
-    #    sys.exit(-1)
-    #except KeyboardInterrupt:
-    #    pass
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=python

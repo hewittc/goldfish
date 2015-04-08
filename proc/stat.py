@@ -51,6 +51,9 @@ class ProcStatReader(object):
     def __init__(self):
         pass
 
+    def get_pids(self):
+        return ( int(pid) for pid in os.listdir('/proc') if pid.isdigit() )
+
     def decode_proc_stat(self, line):
         stat = re.match(r'(\d+)\s\((.+)\)\s([RSDZTW])\s(\d+)\s(\d+)\s(\d+)', line)
         pid = int(stat.group(1))
@@ -68,13 +71,11 @@ class ProcStatReader(object):
 
         if os.path.isfile(proc_stat_path) and os.access(proc_stat_path, os.R_OK):
             with open(proc_stat_path, 'r') as fd:
-                decoded = self.decode_proc_stat(fd.readlines()[0])
+                line = fd.readlines()[0]
+                decoded = self.decode_proc_stat(line)
                 for key in decoded:
                     setattr(proc_stat, key, decoded[key])
 
         return proc_stat
-
-    def get_pids(self):
-        return ( int(pid) for pid in os.listdir('/proc') if pid.isdigit() )
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=python

@@ -51,7 +51,7 @@ def waitpid(pid, stat_loc, options):
 
     return c_waitpid(c_pid, c_stat_loc, c_options)
 
-class ProcMem(object):
+class ProcMemReader(object):
 
     def __init__(self):
         global c_ptrace
