@@ -22,12 +22,12 @@
 from gi.repository import Gdk
 from gi.repository import Gtk
 
-from ui_maps_list import MemViewUIMapsList
+from ui.maps_window import UIMapsWindow
 
-class MemViewUIProcListWindow(Gtk.Window):
+class UIStatsWindow(Gtk.Window):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(title='Goldfish (Process List)')
+        super().__init__(title='Process List - Goldfish')
         self.set_size_request(600, 600)
         self.connect('destroy', Gtk.main_quit)
 
@@ -92,10 +92,10 @@ class MemViewUIProcListWindow(Gtk.Window):
     def update_process_list(self, processes):
         self.process_liststore.clear()
         for process in processes:
-            self.process_liststore.append([process['pid'], process['comm'], process['state'], process['ppid'], process['pgrp'], process['session']])
+            self.process_liststore.append([process.pid, process.comm, process.state, process.ppid, process.pgrp, process.session])
 
     def update_ptrace_label(self, msg):
-        self.ptrace_status_label.set_text('Process trace restrictions: {msg}'.format(msg=msg))
+        self.ptrace_status_label.set_text('process trace restrictions: {msg}'.format(msg=msg))
 
     def run(self):
         Gtk.main()

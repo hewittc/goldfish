@@ -51,14 +51,7 @@ def waitpid(pid, stat_loc, options):
 
     return c_waitpid(c_pid, c_stat_loc, c_options)
 
-class MemViewError(Exception):
-    def __init__(self, message):
-        self.message = message
-
-    def __str__(self):
-        return self.message
-
-class MemViewReader(object):
+class ProcMem(object):
 
     def __init__(self):
         global c_ptrace

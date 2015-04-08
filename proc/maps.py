@@ -19,13 +19,41 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 
-from gi.repository import Gdk
-from gi.repository import Gtk
-from gi.repository.GObject import GObject
+import os
+import re
+import sys
+import binascii
+import ctypes
+import ctypes.util
 
-class MemViewUIMapsList(Gtk.TreeView):
+class ProcMaps(object):
 
     def __init__(self):
         pass
+
+    def _extract_maps(self, line):
+        maps = re.match(r'([0-9A-Fa-f]+)-([0-9A-Fa-f]+)\s+([-r][-w][-x][sp])\s+([0-9A-Fa-f]+)\s+([:0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+(.*)$', line)
+        start = int(maps.group(1), 16)
+        end = int(maps.group(2), 16)
+        perms = maps.group(3)
+        offset = int(maps.group(4), 16)
+        dev = maps.group(5)
+        inode = maps.group(6)
+        pathname = maps.group(7)
+        data = None
+
+        return { 'start': start, 'end': end, 'perms': perms, 'offset': offset, 'dev': dev, 'inode': inode, 'pathname': pathname, 'data': data }
+
+    def read_proc_maps(self, pid):
+        proc_maps = '/proc/{pid}/maps'.format(pid=pid)
+        maps = None
+
+        if not os.path.isfile(proc_maps) or not os.access(proc_maps, os.R_OK):
+            raise MemViewError('can not read memory mapping for process \'{pid}\''.format(pid=pid))
+
+        with open(proc_maps, 'r') as fd:
+            maps = map(self._extract_maps, fd.readlines())
+
+        return maps
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=python

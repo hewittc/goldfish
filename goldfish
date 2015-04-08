@@ -20,34 +20,47 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 
+import threading
 import platform
 import signal
 import sys
+import os
 
-from ui_proc_list import MemViewUIProcListWindow
-from proc_reader import MemViewReader
-from proc_reader import MemViewError
+from ui.stats_window import UIStatsWindow
+from proc.stat import ProcStatReader
 
-if __name__ == '__main__':
-    if platform.system() != 'Linux':
-        print('this will probably not work unless you are using linux...')
+class Goldfish(threading.Thread):
 
-    try:
+    def __init__(self):
+        if platform.system() != 'Linux':
+            print('this will probably not work unless you are using linux...')
+
         signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-        window = MemViewUIProcListWindow()
-        reader = MemViewReader()
+        psr = ProcStatReader()
+        pids = psr.get_pids()
+        processes = [ psr.read_proc_stat(pid) for pid in pids ]
 
-        window.update_process_list(reader.read_proc_stat_all())
+        self.stats_window = UIStatsWindow()
+        self.stats_window.update_process_list(processes)
+        self.stats_window.run()
 
-        _, msg = reader.ptrace_scope_status()
-        window.update_ptrace_label(msg)
-
-        window.run()
-    except MemViewError as err:
-        print('error: {msg}'.format(msg=err))
-        sys.exit(-1)
+if __name__ == '__main__':
+    try:
+        Goldfish()
     except KeyboardInterrupt:
         pass
+
+        #window.update_process_list(reader.read_proc_stat_all())
+
+        #_, msg = reader.ptrace_scope_status()
+        #window.update_ptrace_label(msg)
+
+        #window.run()
+    #except MemViewError as err:
+    #    print('error: {msg}'.format(msg=err))
+    #    sys.exit(-1)
+    #except KeyboardInterrupt:
+    #    pass
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=python
