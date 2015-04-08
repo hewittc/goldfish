@@ -47,7 +47,7 @@ class GUIStatsWindow(Gtk.Window):
         self.add_help_menu_actions(action_group)
 
     def create_process_list(self):
-        self.process_liststore = Gtk.ListStore(int, str, str, int, int, int)
+        self.process_liststore = Gtk.ListStore(int, str, int, int, int)
 
         process_liststore_sorted = Gtk.TreeModelSort(model=self.process_liststore)
         process_liststore_sorted.set_sort_column_id(0, Gtk.SortType.DESCENDING)
@@ -67,20 +67,16 @@ class GUIStatsWindow(Gtk.Window):
         column_filename.set_expand(True)
         process_treeview.append_column(column_filename)
 
-        column_state = Gtk.TreeViewColumn('State', text_left_aligned, text=2)
-        column_state.set_sort_column_id(2)
-        process_treeview.append_column(column_state)
-
         column_ppid = Gtk.TreeViewColumn('Parent PID', text_right_aligned, text=3)
-        column_ppid.set_sort_column_id(3)
+        column_ppid.set_sort_column_id(2)
         process_treeview.append_column(column_ppid)
 
         column_pgrp = Gtk.TreeViewColumn('Process GID', text_right_aligned, text=4)
-        column_pgrp.set_sort_column_id(4)
+        column_pgrp.set_sort_column_id(3)
         process_treeview.append_column(column_pgrp)
 
         column_session = Gtk.TreeViewColumn('Session ID', text_right_aligned, text=5)
-        column_session.set_sort_column_id(5)
+        column_session.set_sort_column_id(4)
         process_treeview.append_column(column_session)
 
         process_treeview_scroller = Gtk.ScrolledWindow()
@@ -92,7 +88,7 @@ class GUIStatsWindow(Gtk.Window):
     def update_process_list(self, processes):
         self.process_liststore.clear()
         for process in processes:
-            self.process_liststore.append([process.pid, process.comm, process.state, process.ppid, process.pgrp, process.session])
+            self.process_liststore.append([process.pid, process.comm, process.ppid, process.pgrp, process.session])
 
     def update_ptrace_label(self, perm):
         if perm is 0:
