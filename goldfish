@@ -28,7 +28,7 @@ import os
 
 from ui.stats_window import UIStatsWindow
 from proc.stat import ProcStatReader
-#from proc.maps import ProcMapsReader
+from proc.maps import ProcMapsReader
 from proc.mem import ProcMemReader
 
 class GoldfishError(Exception):
@@ -49,7 +49,7 @@ class Goldfish(threading.Thread):
         signal.signal(signal.SIGINT, signal.SIG_DFL)
 
         stat = ProcStatReader()
-        #maps = ProcMapsReader()
+        maps = ProcMapsReader()
         mem = ProcMemReader()
 
         pids = stat.get_pids()
@@ -62,6 +62,7 @@ class Goldfish(threading.Thread):
         self.stats_window.update_ptrace_label(perm)
 
         self.stats_window.run()
+
 
 if __name__ == '__main__':
     try:

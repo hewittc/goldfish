@@ -29,6 +29,15 @@ import ctypes.util
 class ProcMaps(object):
 
     def __init__(self):
+        attrs = ('address_start', 'address_end', 'perms', 'offset', 'dev', 
+                'inode', 'pathname')
+
+        for attr in attrs:
+            setattr(self, attr, None)
+
+class ProcMapsReader(object):
+
+    def __init__(self):
         pass
 
     def _extract_maps(self, line):

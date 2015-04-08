@@ -19,7 +19,6 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from ui.maps_window import UIMapsWindow
@@ -27,7 +26,7 @@ from ui.maps_window import UIMapsWindow
 class UIStatsWindow(Gtk.Window):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(title='Process List - Goldfish')
+        super().__init__(title='Process List')
         self.set_size_request(600, 600)
         self.connect('destroy', Gtk.main_quit)
 
@@ -42,7 +41,7 @@ class UIStatsWindow(Gtk.Window):
         self.show_all()
 
     def create_menu_bar(self):
-        action_group = Gtk.ActionGroup("goldfish_actions")
+        action_group = Gtk.ActionGroup('goldfish_actions')
 
         self.add_file_menu_actions(action_group)
         self.add_help_menu_actions(action_group)
@@ -54,6 +53,7 @@ class UIStatsWindow(Gtk.Window):
         process_liststore_sorted.set_sort_column_id(0, Gtk.SortType.DESCENDING)
 
         process_treeview = Gtk.TreeView(model=process_liststore_sorted)
+        process_treeview.connect('row-activated', UIMapsWindow, 'hiiiiii')
 
         text_left_aligned = Gtk.CellRendererText(xalign=0)
         text_right_aligned = Gtk.CellRendererText(xalign=1)

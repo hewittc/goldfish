@@ -26,6 +26,20 @@ class ProcStat(object):
 
     def __init__(self, pid):
         self.pid = pid
+        attrs = ('comm', 'state', 'ppid', 'pgrp', 'session', 'tty_nr', 
+                 'tpgid', 'flags', 'minflt', 'cminflt', 'majflt', 'cmajflt', 
+                 'utime', 'stime', 'cutime', 'cstime', 'priority', 'nice', 
+                 'num_threads', 'itrealvalue', 'starttime', 'vsize', 'rss', 
+                 'rsslim', 'startcode', 'endcode', 'startstack', 'kstkesp', 
+                 'kstkeip', 'signal', 'blocked', 'sigignore', 'sigcatch', 
+                 'wchan', 'nswap', 'cnswap', 'exit_signal', 'processor', 
+                 'rt_priority', 'policy', 'delayacct_blkio_ticks', 
+                 'guest_time', 'cguest_time', 'start_data', 'end_data', 
+                 'start_brk', 'arg_start', 'arg_end', 'env_start', 'env_end', 
+                 'exit_code', 'maps', 'mem')
+
+        for attr in attrs:
+            setattr(self, attr, None)
 
     def decode_state(self):
         result = 'Unknown'
