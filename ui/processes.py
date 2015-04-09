@@ -23,7 +23,7 @@ from gi.repository import Gtk
 
 from ui.maps import GUIMapsWindow
 
-class GUIStatsWindow(Gtk.Window):
+class GUIProcessesWindow(Gtk.Window):
 
     def __init__(self, *args, **kwargs):
         super().__init__(title='Process List')
@@ -53,7 +53,7 @@ class GUIStatsWindow(Gtk.Window):
         process_liststore_sorted.set_sort_column_id(0, Gtk.SortType.DESCENDING)
 
         process_treeview = Gtk.TreeView(model=process_liststore_sorted)
-        #process_treeview.connect('row-activated', GUIMapsWindow, 'hiiiiii')
+        process_treeview.connect('row-activated', GUIMapsWindow)
 
         text_left_aligned = Gtk.CellRendererText(xalign=0)
         text_right_aligned = Gtk.CellRendererText(xalign=1)
