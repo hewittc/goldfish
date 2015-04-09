@@ -56,13 +56,19 @@ class ProcMapsReader(object):
 
     def read_proc_maps(self, pid):
         proc_maps = '/proc/{pid}/maps'.format(pid=pid)
-        result = ProcMap()
+        result = []
 
         if not os.path.isfile(proc_maps) or not os.access(proc_maps, os.R_OK):
             raise GoldfishError('can not read memory mapping for process \'{pid}\''.format(pid=pid))
 
         with open(proc_maps, 'r') as fd:
-            maps = map(self.decode_proc_maps, fd.readlines())
+            mmaps = map(self.decode_proc_maps, fd.readlines())
+
+        for mmap in mmaps:
+            entry = ProcMap()
+            for attr in mmap:
+                setattr(entry, attr, mmap[attr])
+            result.append(entry)
 
         return result
 

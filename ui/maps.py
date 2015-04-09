@@ -36,7 +36,7 @@ class GUIMapsWindow(Gtk.Window):
         self.show_all()
 
     def create_mmap_list(self):
-        self.mmap_liststore = Gtk.ListStore(int)
+        self.mmap_liststore = Gtk.ListStore(str, str, str, str, str, str, str)
 
         mmap_liststore_sorted = Gtk.TreeModelSort(model=self.mmap_liststore)
         mmap_liststore_sorted.set_sort_column_id(0, Gtk.SortType.DESCENDING)
@@ -50,28 +50,28 @@ class GUIMapsWindow(Gtk.Window):
         column_address_start.set_sort_column_id(0)
         mmap_treeview.append_column(column_address_start)
 
-        column_address_end = Gtk.TreeViewColumn('Address End', text_right_aligned, text=0)
+        column_address_end = Gtk.TreeViewColumn('Address End', text_right_aligned, text=1)
         column_address_end.set_sort_column_id(1)
         mmap_treeview.append_column(column_address_end)
 
-        column_perms = Gtk.TreeViewColumn('Permissions', text_right_aligned, text=0)
+        column_perms = Gtk.TreeViewColumn('Permissions', text_right_aligned, text=2)
         column_perms.set_sort_column_id(2)
         mmap_treeview.append_column(column_perms)
 
-        column_offset = Gtk.TreeViewColumn('Offset', text_right_aligned, text=0)
+        column_offset = Gtk.TreeViewColumn('Offset', text_right_aligned, text=3)
         column_offset.set_sort_column_id(3)
         mmap_treeview.append_column(column_offset)
 
-        column_device = Gtk.TreeViewColumn('Device', text_right_aligned, text=0)
+        column_device = Gtk.TreeViewColumn('Device', text_right_aligned, text=4)
         column_device.set_sort_column_id(4)
         mmap_treeview.append_column(column_device)
 
-        column_inode = Gtk.TreeViewColumn('Inode', text_right_aligned, text=0)
-        column_inode.set_sort_column_id(4)
+        column_inode = Gtk.TreeViewColumn('Inode', text_right_aligned, text=5)
+        column_inode.set_sort_column_id(5)
         mmap_treeview.append_column(column_inode)
 
-        column_pathname = Gtk.TreeViewColumn('Path', text_right_aligned, text=0)
-        column_pathname.set_sort_column_id(5)
+        column_pathname = Gtk.TreeViewColumn('Path', text_right_aligned, text=6)
+        column_pathname.set_sort_column_id(6)
         mmap_treeview.append_column(column_pathname)
 
         mmap_treeview_scroller = Gtk.ScrolledWindow()
@@ -79,5 +79,10 @@ class GUIMapsWindow(Gtk.Window):
         mmap_treeview_scroller.add(mmap_treeview)
 
         return mmap_treeview_scroller
+
+    def update_mmap_list(self, maps):
+        self.mmap_liststore.clear()
+        for mmap in mmaps:
+            self.mmap_liststore.append([mmap.address_start, mmap.address_end, mmap.perms, mmap.offset, mmap.device, mmap.inode, mmap.pathname])
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=python
