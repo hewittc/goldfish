@@ -23,10 +23,11 @@ from gi.repository import Gtk
 
 class GUIMapsWindow(Gtk.Window):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(title='Memory Maps')
+    def __init__(self, pid, *args, **kwargs):
+        super().__init__(title='Memory Maps - PID# {pid}'.format(pid=pid))
         self.set_size_request(900, 400)
 
+        self.pid = pid
         self.mmap_treeview_scroller = self.create_mmap_list()
 
         vbox = Gtk.VBox()

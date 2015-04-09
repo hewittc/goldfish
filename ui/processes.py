@@ -40,6 +40,13 @@ class GUIProcessesWindow(Gtk.Window):
 
         self.show_all()
 
+    def create_maps_window(self, *args, **kwargs):
+        (model, pathlist) = args[0].get_selection().get_selected_rows()
+        for path in pathlist:
+            tree_iter = model.get_iter(path)
+            pid = model.get_value(tree_iter, 0)
+            GUIMapsWindow(pid, args, kwargs)
+
     def create_menu_bar(self):
         action_group = Gtk.ActionGroup('goldfish_actions')
 
@@ -53,7 +60,7 @@ class GUIProcessesWindow(Gtk.Window):
         process_liststore_sorted.set_sort_column_id(0, Gtk.SortType.DESCENDING)
 
         process_treeview = Gtk.TreeView(model=process_liststore_sorted)
-        process_treeview.connect('row-activated', GUIMapsWindow)
+        process_treeview.connect('row-activated', self.create_maps_window)
 
         text_left_aligned = Gtk.CellRendererText(xalign=0)
         text_right_aligned = Gtk.CellRendererText(xalign=1)
