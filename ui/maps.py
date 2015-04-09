@@ -40,7 +40,7 @@ class GUIMapsWindow(Gtk.Window):
         self.mmap_liststore = Gtk.ListStore(str, str, str, str, str, str, str)
 
         mmap_liststore_sorted = Gtk.TreeModelSort(model=self.mmap_liststore)
-        mmap_liststore_sorted.set_sort_column_id(0, Gtk.SortType.DESCENDING)
+        mmap_liststore_sorted.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         mmap_treeview = Gtk.TreeView(model=mmap_liststore_sorted)
 
@@ -55,7 +55,7 @@ class GUIMapsWindow(Gtk.Window):
         column_address_end.set_sort_column_id(1)
         mmap_treeview.append_column(column_address_end)
 
-        column_perms = Gtk.TreeViewColumn('Permissions', text_right_aligned, text=2)
+        column_perms = Gtk.TreeViewColumn('Perm', text_right_aligned, text=2)
         column_perms.set_sort_column_id(2)
         mmap_treeview.append_column(column_perms)
 
@@ -63,15 +63,15 @@ class GUIMapsWindow(Gtk.Window):
         column_offset.set_sort_column_id(3)
         mmap_treeview.append_column(column_offset)
 
-        column_device = Gtk.TreeViewColumn('Device', text_right_aligned, text=4)
-        column_device.set_sort_column_id(4)
-        mmap_treeview.append_column(column_device)
+        column_dev = Gtk.TreeViewColumn('Dev', text_right_aligned, text=4)
+        column_dev.set_sort_column_id(4)
+        mmap_treeview.append_column(column_dev)
 
         column_inode = Gtk.TreeViewColumn('Inode', text_right_aligned, text=5)
         column_inode.set_sort_column_id(5)
         mmap_treeview.append_column(column_inode)
 
-        column_pathname = Gtk.TreeViewColumn('Path', text_right_aligned, text=6)
+        column_pathname = Gtk.TreeViewColumn('Path', text_left_aligned, text=6)
         column_pathname.set_sort_column_id(6)
         mmap_treeview.append_column(column_pathname)
 
@@ -81,9 +81,9 @@ class GUIMapsWindow(Gtk.Window):
 
         return mmap_treeview_scroller
 
-    def update_mmap_list(self, maps):
+    def update_mmap_list(self, mmaps):
         self.mmap_liststore.clear()
         for mmap in mmaps:
-            self.mmap_liststore.append([mmap.address_start, mmap.address_end, mmap.perms, mmap.offset, mmap.device, mmap.inode, mmap.pathname])
+            self.mmap_liststore.append([hex(mmap.address_start), hex(mmap.address_end), mmap.perms, hex(mmap.offset), mmap.dev, mmap.inode, mmap.pathname])
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=python

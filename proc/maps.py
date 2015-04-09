@@ -65,7 +65,7 @@ class ProcMapsReader(object):
             mmaps = map(self.decode_proc_maps, fd.readlines())
 
         for mmap in mmaps:
-            entry = ProcMap()
+            entry = ProcMaps()
             for attr in mmap:
                 setattr(entry, attr, mmap[attr])
             result.append(entry)

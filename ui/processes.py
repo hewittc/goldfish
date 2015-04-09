@@ -25,10 +25,14 @@ from ui.maps import GUIMapsWindow
 
 class GUIProcessesWindow(Gtk.Window):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, proc_stat, proc_maps, proc_mem, *args, **kwargs):
         super().__init__(title='Process List')
         self.set_size_request(600, 600)
         self.connect('destroy', Gtk.main_quit)
+
+        self.proc_stat = proc_stat
+        self.proc_maps = proc_maps
+        self.proc_mem = proc_mem
 
         self.process_treeview_scroller = self.create_process_list()
         self.ptrace_status_label = Gtk.Label('', xalign=1)
@@ -45,7 +49,8 @@ class GUIProcessesWindow(Gtk.Window):
         for path in pathlist:
             tree_iter = model.get_iter(path)
             pid = model.get_value(tree_iter, 0)
-            GUIMapsWindow(pid, args, kwargs)
+            maps_window = GUIMapsWindow(pid, self.proc_maps, self.proc_mem, args, kwargs)
+            maps_window.update_mmap_list(self.proc_maps.read_proc_maps(pid))
 
     def create_menu_bar(self):
         action_group = Gtk.ActionGroup('goldfish_actions')

@@ -55,13 +55,12 @@ class Goldfish(threading.Thread):
         pids = stat.get_pids()
         processes = [ stat.read_proc_stat(pid) for pid in pids ]
 
-        self.stats_window = GUIProcessesWindow()
-        self.stats_window.update_process_list(processes)
+        self.processes_window = GUIProcessesWindow(stat, maps, mem)
+        self.processes_window.update_process_list(processes)
 
         perm = mem.ptrace_scope_status()
-        self.stats_window.update_ptrace_label(perm)
-
-        self.stats_window.run()
+        self.processes_window.update_ptrace_label(perm)
+        self.processes_window.run()
 
 
 if __name__ == '__main__':
